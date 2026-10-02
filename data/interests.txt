@@ -1,0 +1,10 @@
+# My interests — one per line. Read by recommend_from_interests.sh
+# (through book_database.sh). Words are matched against catalog tags.
+hard-sf
+first-contact
+ai
+space
+systems
+distributed-systems
+unix
+software

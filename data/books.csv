@@ -1,1 +1,15 @@
-title,author,genre,status,rating,link
+title,author,genre,status,rating,year,link
+Dune,Frank Herbert,Science Fiction,finished,5,1965,https://openlibrary.org/search?q=Dune+Frank+Herbert
+Project Hail Mary,Andy Weir,Science Fiction,finished,5,2021,https://openlibrary.org/search?q=Project+Hail+Mary+Andy+Weir
+The Three-Body Problem,Cixin Liu,Science Fiction,finished,5,2008,https://openlibrary.org/search?q=The+Three+Body+Problem+Cixin+Liu
+Neuromancer,William Gibson,Science Fiction,finished,4,1984,https://openlibrary.org/search?q=Neuromancer+William+Gibson
+Foundation,Isaac Asimov,Science Fiction,want-to-read,,1951,https://openlibrary.org/search?q=Foundation+Isaac+Asimov
+The Pragmatic Programmer,Andrew Hunt & David Thomas,Engineering,reading,,1999,https://openlibrary.org/search?q=The+Pragmatic+Programmer
+The Mythical Man-Month,Frederick P. Brooks Jr.,Engineering,finished,4,1975,https://openlibrary.org/search?q=The+Mythical+Man+Month
+Designing Data-Intensive Applications,Martin Kleppmann,Engineering,owned,,2017,https://openlibrary.org/search?q=Designing+Data+Intensive+Applications
+Count Zero,William Gibson,Science Fiction,want-to-read,,1986,https://openlibrary.org/search?q=Count+Zero+William+Gibson
+Death's End,Cixin Liu,Science Fiction,want-to-read,,2010,https://openlibrary.org/search?q=Death+s+End+Cixin+Liu
+Piranesi,Susanna Clarke,Fantasy,want-to-read,,2020,https://openlibrary.org/works/OL20893680W
+The Hitchhiker's Guide to the Galaxy,Douglas Adams,Science Fiction,want-to-read,,1979,https://openlibrary.org/search?q=The+Hitchhiker+s+Guide+to+the+Galaxy+Douglas+Adams
+The Dark Forest,Cixin Liu,Science Fiction,want-to-read,,2008,https://openlibrary.org/search?q=The+Dark+Forest+Cixin+Liu
+1984,George Orwell,Science Fiction,want-to-read,,2003,https://openlibrary.org/works/OL11326416W

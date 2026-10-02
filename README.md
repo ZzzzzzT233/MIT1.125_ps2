@@ -1,429 +1,69 @@
-# Problem Set #2: Build Your Personal Book Manager
+# Tong's Book Manager (MIT 1.125 — Problem Set #2)
 
-## Goal
+A small personal book manager for the terminal, built from small Bash programs and [Gum](https://github.com/charmbracelet/gum). It keeps track of my sci-fi and systems/engineering reading. Three recommendation agents run in parallel, and their combined output is piped into a refiner that builds a shortlist.
 
-Build a small, personal command-line application for managing books.
+**Demo video:** [video_tiny.mp4](video_tiny.mp4)
 
-The system should help you:
-
-- keep track of books you own, want to read, are reading, or have finished
-- search and browse your library
-- enrich books with useful metadata
-- generate personalized recommendations
-- run several recommendation strategies in parallel
-- combine and refine results through pipes
-- show progress while work is happening
-- provide a rich terminal interface using Gum
-
-The purpose of this problem set is not to build a large application. The purpose is to build a **small system whose architecture you understand end to end**.
-
-You may use Codex. However, you should be able to open any file in your project and explain what it does, what goes into it, what comes out of it, and how it connects to the rest of the application.
-
----
-
-## Architectural Principle
-
-Your application should be built from **small, understandable Bash programs**.
-
-The architecture is:
-
-```text
-UI → Workflows → Book / Recommendation Components → Data Layer → Storage
-```
-
-The application should not place everything in one Bash file.
-
-Instead, each architectural responsibility should live in a separate file. The filesystem itself should make the architecture visible.
-
----
-
-## Required Project Structure
-
-```text
-book-manager/
-│
-├── app.sh
-│
-├── ui/
-│   ├── main_menu.sh
-│   ├── library_screen.sh
-│   └── recommendations_screen.sh
-│
-├── workflows/
-│   ├── manage_library.sh
-│   └── get_recommendations.sh
-│
-├── books/
-│   ├── fetch_book_metadata.sh
-│   └── search_books.sh
-│
-├── recommendations/
-│   ├── recommend_from_history.sh
-│   ├── recommend_from_interests.sh
-│   ├── recommend_for_discovery.sh
-│   └── refine_recommendations.sh
-│
-└── data/
-    ├── book_database.sh
-    └── books.csv
-```
-
-You may add files if you have a clear reason, but do not remove or collapse the required architectural layers.
-
----
-
-## What Each File Must Do
-
-### `app.sh`
-
-The entry point for the application.
-
-Responsibilities:
-
-- start the application
-- call the main UI
-- connect the top-level pieces together
-- remain small
-
-`app.sh` should not contain database logic, recommendation logic, or large UI sections.
-
----
-
-## UI Layer
-
-### `ui/main_menu.sh`
-
-The application's main menu.
-
-Use **Gum** to let the user choose actions such as:
-
-- Browse Library
-- Add Book
-- Search Library
-- Get Recommendations
-- Quit
-
-This file should focus on interaction, not application logic.
-
-### `ui/library_screen.sh`
-
-Displays library-related information.
-
-Possible responsibilities:
-
-- show saved books
-- show reading status
-- display search results
-- present book details
-
-### `ui/recommendations_screen.sh`
-
-Displays recommendation-related information.
-
-Possible responsibilities:
-
-- show progress while recommendation agents are running
-- show the final shortlist
-- let the user select or save a recommended book
-
----
-
-## Workflow Layer
-
-### `workflows/manage_library.sh`
-
-Coordinates library operations.
-
-Examples:
-
-```text
-User Input → Metadata → Database
-```
-
-or
-
-```text
-Search Request → Search Component → Results → UI
-```
-
-This file should coordinate components rather than perform every task itself.
-
-### `workflows/get_recommendations.sh`
-
-Coordinates the recommendation workflow.
-
-This is where you should demonstrate **parallelization, synchronization, pipes, and streaming**.
-
-At minimum:
-
-1. Start the three recommendation programs in parallel.
-2. Show that work is happening while they run.
-3. Wait for them to finish.
-4. Combine their outputs.
-5. Pipe the combined recommendations into `refine_recommendations.sh`.
-6. Send the final result to the UI.
-
-Conceptually:
-
-```text
-                    ┌→ History Agent ────┐
-Library + Interests ├→ Interest Agent ───┼→ Combine → Refine → Display
-                    └→ Discovery Agent ──┘
-```
-
----
-
-## Book Components
-
-### `books/fetch_book_metadata.sh`
-
-Takes basic book information and enriches it.
-
-Possible input:
-
-```text
-Dune | Frank Herbert
-```
-
-Possible output:
-
-```text
-Dune | Frank Herbert | Science Fiction | 1965
-```
-
-Keep the interface simple and predictable.
-
-You may use Codex as part of this step.
-
-### `books/search_books.sh`
-
-Searches the user's library.
-
-It should receive a search term and return matching books.
-
-Examples:
+## How to run
 
 ```bash
-./books/search_books.sh "history"
+brew install gum          # required; curl + jq (both preinstalled on macOS) enable live metadata lookups
+./app.sh
 ```
 
-or through a pipe:
+Every component can also be run on its own:
 
 ```bash
-echo "history" | ./books/search_books.sh
+./data/book_database.sh list
+echo "engineering" | ./books/search_books.sh
+echo "Piranesi | Susanna Clarke" | ./books/fetch_book_metadata.sh
+cat <(./recommendations/recommend_from_history.sh) <(./recommendations/recommend_for_discovery.sh) \
+  | ./recommendations/refine_recommendations.sh 5
 ```
 
----
-
-## Recommendation Components
-
-These three programs should represent **different ways of thinking about a recommendation**.
-
-They should be independent so they can run in parallel.
-
-### `recommendations/recommend_from_history.sh`
-
-Recommend books based on what the user has already read, rated, or saved.
-
-### `recommendations/recommend_from_interests.sh`
-
-Recommend books based on the user's stated interests, topics, fields, hobbies, or goals.
-
-### `recommendations/recommend_for_discovery.sh`
-
-Recommend something intentionally outside the user's normal patterns.
-
-The purpose is exploration rather than similarity.
-
-### `recommendations/refine_recommendations.sh`
-
-Receives recommendation candidates through `stdin`.
-
-Its job is to:
-
-- remove obvious duplicates
-- remove books already in the library
-- reduce the candidate list
-- polish or rank the final shortlist
-
-It should produce a clean final result on `stdout`.
-
-This makes it usable in a pipeline:
-
-```bash
-cat recommendations.txt | ./recommendations/refine_recommendations.sh
-```
-
----
-
-## Data Layer
-
-### `data/book_database.sh`
-
-This is the **only application component that should directly read from or write to `books.csv`**.
-
-Other files should ask the data layer to perform operations such as:
-
-- add a book
-- list books
-- search books
-- update status
-- update rating
-- check whether a book already exists
-
-This creates an abstraction boundary between your application and its storage.
-
-The rest of the application should not care whether the data is stored in CSV, SQLite, or something else.
-
-### `data/books.csv`
-
-The persistent storage for your library.
-
-Keep the structure simple. For example:
+## Architecture
 
 ```text
-title,author,genre,status,rating,link
+app.sh → ui/main_menu.sh → workflows/ → books/ + recommendations/ → data/book_database.sh → data/books.csv
 ```
 
-You may extend the schema if your application needs additional fields.
+`app.sh` only checks for Gum and starts `ui/main_menu.sh`. The menu turns a Gum selection into a call to one of two workflows. `workflows/manage_library.sh` sets the order of library operations, for example *prompt → `fetch_book_metadata.sh` → `book_database.sh add`* or *prompt `| search_books.sh |` `library_screen.sh table`*. `workflows/get_recommendations.sh` starts the three agents in the background with `&` and saves each PID with `$!`. While they run, it polls them with `kill -0` and redraws a single status line (`running` / `done` plus an elapsed timer). It then calls `wait` on each PID, joins their outputs with `cat … | refine_recommendations.sh`, and passes the shortlist to `ui/recommendations_screen.sh`. If I pick a book, that pick goes back through `manage_library.sh save-rec` into the database.
 
----
+Each layer talks to the next through plain text on stdin/stdout:
 
-## Required Technical Concepts
+- library rows are CSV
+- metadata is `Title | Author | Genre | Year | Link`
+- recommendation candidates are `title|author|genre|score|agent|reason`
 
-Your application must demonstrate all of the following:
+`data/book_database.sh` is the only file that opens `books.csv` or `interests.txt`. The UI scripts only display things and collect input.
 
-### Bash Programs
+## What I personalized
 
-The application must be composed primarily of small Bash programs.
+- **The agents reflect how I read.** The history agent favors authors I've already liked (+3) and genres I rate highly. The interests agent matches my editable profile (`hard-sf`, `first-contact`, `ai`, `systems`, `unix`, …) against catalog tags. The discovery agent is there to get me out of my sci-fi/engineering bubble: it only suggests genres that appear nowhere in my library, and it picks a different random book each run.
+- **The refiner encodes my rules for a good shortlist:**
+  - when agents agree, their scores add up, so consensus picks rank first
+  - at most one book per author
+  - one slot is always kept for a **wildcard** from the discovery agent
+- **Extra features I wanted:** reading stats (counts by status, average rating, favorite genre), an in-app **Edit Interests** editor (`gum write`) that immediately changes what the interests agent recommends, and an **Update Book** flow for moving a book from want-to-read → reading → finished with a rating.
+- **Metadata:** the curated local catalog is checked first, so lookups work offline. If the book isn't there, the app falls back to the Open Library API.
 
-### Pipes
+## Files
 
-At least one meaningful workflow must pass output from one program directly into another using `|`.
+| File | Input → Output |
+|---|---|
+| `app.sh` | — → starts the menu |
+| `ui/main_menu.sh` | Gum choice → workflow call |
+| `ui/library_screen.sh` | CSV rows → tables, detail cards, stats; Gum prompts → values |
+| `ui/recommendations_screen.sh` | agent states → live status line; shortlist → chosen book |
+| `workflows/manage_library.sh` | browse / add / search / update / stats / interests / save-rec |
+| `workflows/get_recommendations.sh` | runs agents with `&` + `$!` + `wait`, then a pipe into refine |
+| `books/fetch_book_metadata.sh` | `Title \| Author` → `Title \| Author \| Genre \| Year \| Link` |
+| `books/search_books.sh` | term (argument or stdin) → matching CSV rows |
+| `recommendations/recommend_*.sh` | library/interests + `catalog.txt` → scored candidates |
+| `recommendations/refine_recommendations.sh` | candidates on stdin → top-N shortlist on stdout |
+| `recommendations/catalog.txt` | the candidate pool the agents draw from |
+| `data/book_database.sh` | `list, search, get, exists, titles, add, update-status, update-rating, interests, set-interests` |
+| `data/books.csv` | `title,author,genre,status,rating,year,link` |
+| `data/interests.txt` | my interests, one per line |
 
-Example pattern:
-
-```text
-Generate → Filter → Refine
-```
-
-### Parallelization
-
-The three recommendation programs must run concurrently using Bash background processes.
-
-You should use the concepts introduced in class:
-
-```bash
-&
-$!
-wait
-```
-
-### Streaming / Progress
-
-The user should be able to tell that work is happening while longer-running tasks execute.
-
-Keep this simple. A changing status line, elapsed timer, or messages such as `running` / `done` are sufficient.
-
-### Gum
-
-Use Gum to create a richer command-line experience.
-
-At minimum, use it for the main menu and user selection.
-
-### Codex
-
-You may use Codex inside your application and while developing it.
-
-However, keep the code small and understandable.
-
-A good test is:
-
-> Can you explain every file in your project without asking Codex what it does?
-
----
-
-## Personalization
-
-Your Book Manager should reflect **you**.
-
-The architecture is prescribed. The experience is not.
-
-You decide:
-
-- what metadata matters to you
-- what counts as a useful recommendation
-- what your recommendation agents optimize for
-- how you organize your library
-- what your interface looks like
-- what additional feature would make the system genuinely useful to you
-
-Your system should reveal something about your interests, preferences, or way of thinking.
-
----
-
-## Keep It Small
-
-Do not optimize for the largest application.
-
-Optimize for:
-
-```text
-Small files
-Clear responsibilities
-Simple interfaces
-Visible data flow
-Understandable architecture
-```
-
-If one Bash file becomes difficult to understand, ask whether it is doing more than one job.
-
----
-
-## Deliverables
-
-Submit your work through **GitHub**.
-
-1. Create a repository in **your own GitHub account**. You may choose the repository name.
-2. Push your complete `book-manager/` project to the repository.
-3. Include a short `README.md` containing:
-   - how to run the application
-   - one paragraph describing your architecture
-   - one paragraph explaining what you personalized
-4. Include a **short narrated demo video** in the repository, or provide a clearly visible link to it from the `README.md`. The video should:
-   - show the application running in the terminal
-   - make the interface clearly visible
-   - demonstrate **two or three operations**
-   - include your narration explaining what you are doing and what the application is doing
-   - be short: the goal is simply to let someone open your project and quickly understand what you built
-5. Be prepared to explain any file in your project and trace one complete workflow from user input to output.
-
-### How to Submit
-
-Enter the URL of your GitHub repository in the class sign-up sheet under the column **`Assignment No 2`**:
-
-https://docs.google.com/spreadsheets/d/1ZewIG5udWWpk3Kdrab5yDbsWDV4gnH3liKobIAp7HG4/edit?usp=sharing
-
-Your GitHub repository URL is your homework submission.
-
----
-
-## What Success Looks Like
-
-A successful submission does not need to be large or sophisticated.
-
-It should feel like **one coherent application assembled from small components**.
-
-When someone opens your project directory, they should be able to understand the architecture before reading much of the code.
-
-When someone runs it, they should see a personal book-management application that demonstrates the core ideas from class:
-
-```text
-Input → Workflow → Decision → Intelligence → Output
-```
-
-combined with:
-
-```text
-Small Programs + Pipes + Parallelization + Streaming + Composition
-```
+The agents `sleep` for 1–3 seconds (configurable with `AGENT_DELAY`) to stand in for slow work such as an API or LLM call, so the parallel progress display is visible. Set `AGENT_DELAY=0` for instant runs.

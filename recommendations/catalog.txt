@@ -1,0 +1,54 @@
+# Candidate pool shared by the recommendation agents (their "knowledge").
+# Format: title|author|genre|year|tags (space-separated)
+# --- Science Fiction ---
+The Dark Forest|Cixin Liu|Science Fiction|2008|first-contact game-theory hard-sf space
+Death's End|Cixin Liu|Science Fiction|2010|first-contact physics hard-sf space
+The Martian|Andy Weir|Science Fiction|2011|space engineering problem-solving
+Children of Dune|Frank Herbert|Science Fiction|1976|desert politics epic
+The Caves of Steel|Isaac Asimov|Science Fiction|1954|robots ai mystery
+Hyperion|Dan Simmons|Science Fiction|1989|space ai pilgrimage
+The Left Hand of Darkness|Ursula K. Le Guin|Science Fiction|1969|anthropology gender
+The Dispossessed|Ursula K. Le Guin|Science Fiction|1974|politics physics anarchism
+Snow Crash|Neal Stephenson|Science Fiction|1992|cyberpunk hacking linguistics
+Cryptonomicon|Neal Stephenson|Science Fiction|1999|cryptography computing history
+Anathem|Neal Stephenson|Science Fiction|2008|philosophy math
+Count Zero|William Gibson|Science Fiction|1986|cyberpunk ai hacking
+Children of Time|Adrian Tchaikovsky|Science Fiction|2015|evolution ai space
+Exhalation|Ted Chiang|Science Fiction|2019|short-stories physics ai
+Stories of Your Life and Others|Ted Chiang|Science Fiction|2002|short-stories linguistics first-contact
+A Fire Upon the Deep|Vernor Vinge|Science Fiction|1992|ai space singularity
+Blindsight|Peter Watts|Science Fiction|2006|first-contact consciousness hard-sf space
+Ancillary Justice|Ann Leckie|Science Fiction|2013|ai empire space
+Permutation City|Greg Egan|Science Fiction|1994|simulation computing consciousness hard-sf
+The Moon Is a Harsh Mistress|Robert A. Heinlein|Science Fiction|1966|ai space revolution
+# --- Engineering / software / systems ---
+Structure and Interpretation of Computer Programs|Harold Abelson & Gerald Jay Sussman|Engineering|1985|programming lisp software
+Code: The Hidden Language of Computer Hardware and Software|Charles Petzold|Engineering|1999|computing hardware systems
+The Soul of a New Machine|Tracy Kidder|Engineering|1981|hardware engineering history
+A Philosophy of Software Design|John Ousterhout|Engineering|2018|software architecture design
+The Unix Programming Environment|Brian Kernighan & Rob Pike|Engineering|1984|unix shell programming systems
+UNIX: A History and a Memoir|Brian Kernighan|Engineering|2019|unix history systems
+Site Reliability Engineering|Betsy Beyer et al.|Engineering|2016|systems operations distributed-systems
+Database Internals|Alex Petrov|Engineering|2019|databases distributed-systems systems
+Operating Systems: Three Easy Pieces|Remzi & Andrea Arpaci-Dusseau|Engineering|2018|systems unix software
+Clean Architecture|Robert C. Martin|Engineering|2017|software architecture
+To Engineer Is Human|Henry Petroski|Engineering|1985|engineering failure design
+# --- Outside my usual patterns (discovery fuel) ---
+Zen and the Art of Motorcycle Maintenance|Robert M. Pirsig|Philosophy|1974|quality engineering journey
+Meditations|Marcus Aurelius|Philosophy|180|stoicism
+The Power Broker|Robert A. Caro|History|1974|cities politics urban-planning
+The Idea Factory|Jon Gertner|History|2012|bell-labs engineering innovation
+Chip War|Chris Miller|History|2022|semiconductors geopolitics hardware
+The Man from the Future|Ananyo Bhattacharya|Biography|2021|von-neumann math computing
+Steve Jobs|Walter Isaacson|Biography|2011|technology design
+Thinking Fast and Slow|Daniel Kahneman|Psychology|2011|decisions bias
+The Design of Everyday Things|Don Norman|Design|1988|design psychology usability
+Invisible Cities|Italo Calvino|Literary Fiction|1972|cities imagination
+One Hundred Years of Solitude|Gabriel Garcia Marquez|Literary Fiction|1967|magical-realism family
+The Overstory|Richard Powers|Literary Fiction|2018|trees ecology
+The Name of the Rose|Umberto Eco|Mystery|1980|medieval mystery semiotics
+A Wizard of Earthsea|Ursula K. Le Guin|Fantasy|1968|magic coming-of-age
+Ariel|Sylvia Plath|Poetry|1965|poetry
+Godel Escher Bach|Douglas Hofstadter|Science|1979|math ai consciousness
+The Selfish Gene|Richard Dawkins|Science|1976|evolution biology
+Thinking in Systems|Donella H. Meadows|Science|2008|systems ecology modeling
